@@ -24,7 +24,7 @@ class MathGame
       printGameStats
       printCareerStats
 
-      puts "Play another game?"
+      puts "Play another game?".colorize(:color => :white, :background => :black)
       puts "(any key to continue, q to quit)"
       break if gets.chomp.capitalize == "Q"
 
@@ -56,13 +56,6 @@ class MathGame
 
   def randomMathProblem
     MathProblem.new([:add, :sub, :mult, :div].sample, @problem_min_number, @problem_max_number)
-  end
-
-  def printStatus
-    puts "........... LIVES REMAINING ..... SCORE"
-    @players.each do |player|
-      puts "Player #{player.playerNum}:          #{player.lives}                 #{player.score}"
-    end
   end
 
   def runQuestion
@@ -121,9 +114,16 @@ class MathGame
   end
 
   def printCareerStats
-    puts "PLAYER STATS --- GAMES WON --- QUESTIONS ANSWERED"
+    puts "PLAYER STATS ---------------------- GAMES WON --- QUESTIONS ANSWERED"
     @players.each do |player|
-      puts "Player #{player.playerNum}:            #{player.gamesWon}              #{player.careerScore}"
+      puts "Player #{player.playerNum} (#{player.name}):".ljust(40) + "#{player.gamesWon}".ljust(19) + "#{player.careerScore}"
+    end
+  end
+
+  def printStatus
+    puts "................................ LIVES REMAINING ....... SCORE"
+    @players.each do |player|
+      puts "Player #{player.playerNum} (#{player.name}):".ljust(40) + "#{player.lives}".ljust(19) + "#{player.score}"
     end
   end
 
