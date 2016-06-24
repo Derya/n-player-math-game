@@ -1,54 +1,27 @@
 
-
 class MathProblem
-
-  def initialize(typeID, minVal, maxVal)
-    @minVal = minVal
-    @maxVal = maxVal
-    case typeID
-    when :add
-      addQuestion
-    when :sub
-      subQuestion
-    when :mult
-      multQuestion
-    when :div
-      divQuestion
-    end
-  end
 
   attr_reader :question, :answer
 
-  def addQuestion
-    x = rand(@maxVal-@minVal) + @minVal
-    y = rand(@maxVal-@minVal) + @minVal
-    @question = "What is #{x.to_i} + #{y.to_i}?"
-    @answer = x + y
-  end
-  def subQuestion
-    x = rand(@maxVal-@minVal) + @minVal
-    y = rand(@maxVal-@minVal) + @minVal
-    if (y > x)
-      x,y = y,x
-    end
-    @question = "What is #{x.to_i} - #{y.to_i}?"
-    @answer = x - y
-  end
-  def multQuestion
-    x = rand(@maxVal-@minVal) + @minVal
-    y = rand(@maxVal-@minVal) + @minVal
-    @question = "What is #{x.to_i} * #{y.to_i}?"
-    @answer = x * y
-  end
-  # haha, i sure hope @minVal is above 0 
-  def divQuestion
-    x = rand(@maxVal-@minVal) + @minVal
-    y = rand(@maxVal-@minVal) + @minVal
-    if (y > x)
-      x,y = y,x
-    end
-    @question = "What is #{x.to_i} / #{y.to_i} rounded down?"
-    @answer = x / y
+  REG = Proc.new { |x, y| [x, y, ""] }
+  SUB = Proc.new { |x, y| (y > x) ? [y, x, ""] : [x, y, ""] }
+  DIV = Proc.new { |x, y| (y > x) ? [y, x, " rounded down"] : [x, y, " rounded down"] }
+  OPERATORS = {
+    :+ => REG,
+    :- => SUB,
+    :* => REG,
+    :/ => DIV,
+    :** => REG
+  }
+
+  def initialize(operator, min_val, max_val)
+    @min_val = min_val
+    @max_val = max_val
+    x = rand(@max_val-@min_val) + @min_val
+    y = rand(@max_val-@min_val) + @min_val
+    x,y,text_append = OPERATORS[operator].call(x, y)
+    @question = "What is #{x} #{operator} #{y}" + text_append + "?"
+    @answer = x.send(operator, y)
   end
 
 end
