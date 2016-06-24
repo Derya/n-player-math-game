@@ -3,12 +3,13 @@ require 'colorize'
 
 MIN_NUMBER = 1
 MAX_NUMBER = 20
+INITIAL_LIVES = 3
 
 @num_players
 @lives
 @score
 @totalScore = []
-@games = []
+@games_won = []
 @playerTurn
 @playersRemaining
 
@@ -18,7 +19,7 @@ def init
   @num_players = gets.chomp.to_i
   for i in 0..(@num_players-1) do
     @totalScore << 0
-    @games << 0
+    @games_won << 0
   end
 end
 
@@ -26,7 +27,7 @@ def initGame
   @lives = []
   @score = []
   for i in 0..(@num_players-1) do
-    @lives << 3
+    @lives << INITIAL_LIVES
     @score << 0
   end
   @playerTurn = [0,@num_players-1].sample
@@ -132,7 +133,7 @@ end
 def printCareerStats
   puts "PLAYER STATS --- GAMES WON --- QUESTIONS ANSWERED"
   for i in 0..(@num_players-1) do
-    puts "Player #{i+1}:            #{@games[i]}              #{@totalScore[i]}"
+    puts "Player #{i+1}:            #{@games_won[i]}              #{@totalScore[i]}"
   end
 end
 
@@ -161,7 +162,7 @@ def runGame
   end
 
   # add game winners' score
-  @games[winner] += 1
+  @games_won[winner] += 1
 end
 
 def gameREPL
